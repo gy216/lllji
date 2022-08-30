@@ -1,0 +1,81 @@
+print("请检查你的Python库是否安装   ")
+
+print("启动窗口代码")
+print("10%")
+print("50%")
+print("100%")
+print("成功！")
+print("您成功启动了果园工作室制作的窗口式浏览量机")
+print("欢迎使用果园工作室制作的浏览量机")
+import requests		
+import re
+from tkinter import *
+import time
+import _thread
+
+payload = ""
+#请求头
+headers = {
+    "Accept": "*/*",
+    "Accept-Encoding": "gzip, deflate, br",
+    "Accept-Language": "zh-CN,zh;q=0.8,en-US;q=0.5,en;q=0.3",
+    "Cookie": "l=AurqcPuigwQdnQv7WvAfCoR1OlrRQW7h; isg=BHp6mNB79CHqYXpVEiRteXyyyKNcg8YEwjgLqoRvCI3ddxqxbLtOFUBGwwOrZ3ad; thw=cn; cna=VsJQERAypn0CATrXFEIahcz8; t=0eed37629fe7ef5ec0b8ecb6cd3a3577; tracknick=tb830309_22; _cc_=UtASsssmfA%3D%3D; tg=0; ubn=p; ucn=unzbyun; x=e%3D1%26p%3D*%26s%3D0%26c%3D0%26f%3D0%26g%3D0%26t%3D0%26__ll%3D-1%26_ato%3D0; miid=981798063989731689; hng=CN%7Czh-CN%7CCNY%7C156; um=0712F33290AB8A6D01951C8161A2DF2CDC7C5278664EE3E02F8F6195B27229B88A7470FD7B89F7FACD43AD3E795C914CC2A8BEB1FA88729A3A74257D8EE4FBBC; enc=1UeyOeN0l7Fkx0yPu7l6BuiPkT%2BdSxE0EqUM26jcSMdi1LtYaZbjQCMj5dKU3P0qfGwJn8QqYXc6oJugH%2FhFRA%3D%3D; ali_ab=58.215.20.66.1516409089271.6; mt=ci%3D-1_1; cookie2=104f8fc9c13eb24c296768a50cabdd6e; _tb_token_=ee7e1e1e7dbe7; v=0",
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64;` rv:47.0) Gecko/20100101 Firefox/47.0"
+}
+
+def getList(url):	#获取用户首页的文章列表
+    resp = requests.request("GET", url, data=payload, headers=headers)	#发送请求
+    resp.encoding=resp.apparent_encoding								#设置解码方式
+    html_source = resp.text
+    #通过正则表达式，从获取的HTML代码中提取出链接
+    urls = re.findall("https://[^>\";\']*\d",html_source)
+    new_urls=[]
+    for url in urls:
+        if 'details' in url:
+            if url not in new_urls:
+                new_urls.append(url)
+    return new_urls
+
+def submit():	#当点击确定时
+    _thread.start_new_thread(window_loop, ())
+    #由于在执行时会出现窗体停止刷新的情况，需要另一个线程辅助窗体刷新
+    urls = getList(Entry1.get())
+    
+    while True:
+        console.insert(1.0,'\n============================')
+        for url in urls:
+            win.update()
+            requests.request("GET", url, data=payload, headers=headers)	#发送请求
+            win.update()
+            console.insert(1.0, "\n{Process} "+ str(url) + ' [Finish]\n')	#在窗体的文本框内插入请求链接及状态
+            win.update()
+            time.sleep(1)
+        time.sleep(1)
+
+def window_loop():	#辅助窗体刷新的线程
+    while True:
+        win.update()	#刷新窗体
+        time.sleep(0.1)
+
+win = Tk()
+win.title('果园浏览量机1.0——果园工作室-制作')
+win.geometry('300x344+100+100')
+
+Label1 = Label(win, text='请输入你的作品网址(加http(s))):', font=('幼圆', 13), anchor=W).place(y=13, x=15, width=234, height=20)
+
+Entry1 = Entry(win, font=('等线', 11), width = 70)
+Entry1.place(y=40, x=15, width=196, height=26)
+
+Button1 = Button(win, text='开始刷!', font=('等线', 11), command = submit).place(y=38, x=218, width=65, height=28)
+print("本浏览量机刷浏览量时会未响应，不要把他关闭，")
+print("——————————————————————————————————————————————————————————————————————————————————————————————")
+console = Text(win, font=('等线', 11))
+console.place(y=82, x=15, width=268, height=241)
+console.insert(1.0,'欢迎使用果园工作室制作的浏览量机1.0，此程序使用IP刷浏览量（PV）如不会使用，请看视频，谢谢，本浏览量机刷浏览量时会未响应，不要把他关闭，如有疑问，请加QQ：386498317，     此程序仅供学习，请合理使用，不要用于非法用途！                                 ')
+
+win.mainloop()
+print("您已关闭果园工作室出品-浏览量机，可能浏览量机强制退出，可能是您自己退出，如有疑问，请加QQ：386498317，     此程序仅供学习，请合理使用，不要用于非法用途，果园工作室制作，专注于HBC的浏览量机                     ——果园工作室-制作-HBC  英文：You have closed the browsing machine produced by orchard studio. The browsing machine may be forced to exit, or you may exit yourself. If you have any questions, please add QQ: 386498317. This program is for learning only, please use it reasonably, and do not use it for illegal purposes. Orchard studio makes, and focuses on HBC's browsing machine orchard Studio - make HBC")
+print("————————————————————————————————————————————————————————————————————————————————————————————")
+print("再见")
+print("————————————————————————————————————————————————————————————————————————————————————————————")
+print("已成功关闭程序 The program was successfully closed")

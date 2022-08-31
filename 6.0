@@ -1,0 +1,25 @@
+import time
+
+print('果园工作室-制作')
+print('由群内的awa制作，果园允许改编','作者已给版权')
+print('——————————————————————————————————————————————————————————————')
+try:
+    import requests as awa
+    print('你的Python请求库的安装位置',awa)
+    print('——————————————————————————————————————————————————————————————')
+    site = 'https://mblock.makeblock.com/project/1600864'
+    frequency = int(input('你要刷的次数:'))
+    print('请等待！（请求：库、网络）')
+    time.sleep(2)
+    print('你要刷的网址是',site)
+    time.sleep(1)
+    print('你要刷',frequency,'次','开始','！')
+    print('______________________________________________________________')
+    for i in range(frequency):
+        a = awa.get(site)
+        print('已刷',(i + 1),'次','，还剩',(frequency - (i + 1)),'次           ','大约剩',((frequency - (i + 1)) / 2),'秒')
+    print('完成！','你刷了',frequency,'次，','网址是',site,'，','果园工作室-制作')
+except ImportError:
+    print('未安装','requests','（请求）','库','，','可能是编辑器无法安装，请换一个编辑器','Unable to load editor request Library')
+except:
+    print('任意错误')
